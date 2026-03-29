@@ -1,9 +1,9 @@
-# color-converter
+# color_conv
 
-Color format converter (hex/rgb/hsl). Zero-dependency, single-file Python CLI.
-
-## Usage
+Color space converter: RGB, HSL, HSV, HEX, CMYK with blending and distance
 
 ```bash
-python3 color_conv.py --help
+python3 color_conv.py test
 ```
+
+Zero deps. Python 3.8+.
