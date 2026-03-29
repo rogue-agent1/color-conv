@@ -1,9 +1,17 @@
 # color_conv
 
-Color space converter: RGB, HSL, HSV, HEX, CMYK with blending and distance
+Color space converter (RGB, HSL, HSV, HEX, CMYK)
+
+Single-file, zero-dependency Python CLI tool.
+
+## Usage
 
 ```bash
-python3 color_conv.py test
+python color_conv.py --help
 ```
 
-Zero deps. Python 3.8+.
+## Test
+
+```bash
+python -c "import color_conv; color_conv.test()"
+```
