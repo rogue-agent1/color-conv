@@ -1,8 +1,6 @@
-# color-conv
+# color-converter
 
-Convert between color formats (hex, RGB, HSL).
-
-Zero dependencies. Python 3.8+.
+Color format converter (hex/rgb/hsl). Zero-dependency, single-file Python CLI.
 
 ## Usage
 

@@ -1,12 +1,11 @@
-#!/usr/bin/env python3
-"""color_conv - Convert between hex, RGB, and HSL color formats."""
-import sys, colorsys
+import argparse, re, colorsys
 
 def hex_to_rgb(h):
     h = h.lstrip("#")
     return tuple(int(h[i:i+2], 16) for i in (0, 2, 4))
 
-def rgb_to_hex(r, g, b): return f"#{r:02x}{g:02x}{b:02x}"
+def rgb_to_hex(r, g, b):
+    return f"#{r:02x}{g:02x}{b:02x}"
 
 def rgb_to_hsl(r, g, b):
     h, l, s = colorsys.rgb_to_hls(r/255, g/255, b/255)
@@ -16,17 +15,25 @@ def hsl_to_rgb(h, s, l):
     r, g, b = colorsys.hls_to_rgb(h/360, l/100, s/100)
     return round(r*255), round(g*255), round(b*255)
 
-if __name__ == "__main__":
-    if len(sys.argv) < 3: print("Usage: color_conv <hex|rgb|hsl> <value>"); sys.exit(1)
-    fmt = sys.argv[1]
-    if fmt == "hex":
-        r, g, b = hex_to_rgb(sys.argv[2])
+def main():
+    p = argparse.ArgumentParser(description="Color format converter")
+    p.add_argument("color", help="#hex, rgb(r,g,b), or hsl(h,s,l)")
+    args = p.parse_args()
+    c = args.color.strip()
+    if c.startswith("#"):
+        r, g, b = hex_to_rgb(c)
         h, s, l = rgb_to_hsl(r, g, b)
-        print(f"RGB: ({r}, {g}, {b})  HSL: ({h}°, {s}%, {l}%)")
-    elif fmt == "rgb":
-        parts = [int(x) for x in sys.argv[2].split(",")]
-        print(f"Hex: {rgb_to_hex(*parts)}  HSL: {rgb_to_hsl(*parts)}")
-    elif fmt == "hsl":
-        parts = [int(x) for x in sys.argv[2].split(",")]
-        r, g, b = hsl_to_rgb(*parts)
-        print(f"Hex: {rgb_to_hex(r, g, b)}  RGB: ({r}, {g}, {b})")
+        print(f"HEX: {c}\nRGB: rgb({r},{g},{b})\nHSL: hsl({h},{s}%,{l}%)")
+    elif c.startswith("rgb"):
+        nums = [int(x) for x in re.findall(r"\d+", c)]
+        r, g, b = nums[:3]
+        h, s, l = rgb_to_hsl(r, g, b)
+        print(f"HEX: {rgb_to_hex(r,g,b)}\nRGB: rgb({r},{g},{b})\nHSL: hsl({h},{s}%,{l}%)")
+    elif c.startswith("hsl"):
+        nums = [int(x) for x in re.findall(r"\d+", c)]
+        h, s, l = nums[:3]
+        r, g, b = hsl_to_rgb(h, s, l)
+        print(f"HEX: {rgb_to_hex(r,g,b)}\nRGB: rgb({r},{g},{b})\nHSL: hsl({h},{s}%,{l}%)")
+
+if __name__ == "__main__":
+    main()
